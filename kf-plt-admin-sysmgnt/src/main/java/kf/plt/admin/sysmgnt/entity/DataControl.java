@@ -39,7 +39,7 @@ public class DataControl extends BaseObject {
     @Column(name = "column_sql")
     private String columnSql;
 
-    
+
 
 
 

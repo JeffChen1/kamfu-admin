@@ -31,8 +31,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
-            <version>1.5.4.RELEASE</version>
-            <scope>provided</scope>
+            <version>[1.5.10,)</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
