@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kf.plt.admin.sysmgnt.mapper.GroupMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="kf.plt.admin.sysmgnt.entity.Group" id="groupMap">
+        <result property="id" column="group_id"/>
+        <result property="name" column="name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="code" column="code"/>
+        <result property="path" column="path"/>
+        <result property="type" column="type"/>
+        <result property="crtUserName" column="crt_user_name"/>
+        <result property="crtUserId" column="crt_user_id"/>
+        <result property="crtTime" column="crt_time"/>
+        <result property="updUserName" column="upd_user_name"/>
+        <result property="updUserId" column="upd_user_id"/>
+        <result property="updTime" column="upd_time"/>
+        <result property="attr1" column="attr1"/>
+        <result property="attr2" column="attr2"/>
+        <result property="attr3" column="attr3"/>
+        <result property="attr4" column="attr4"/>
+        <result property="attr5" column="attr5"/>
+        <result property="attr6" column="attr6"/>
+        <result property="attr7" column="attr7"/>
+        <result property="attr8" column="attr8"/>
+        <result property="attr9" column="attr9"/>
+        <result property="attr10" column="attr10"/>
+        <result property="attr11" column="attr11"/>
+        <result property="attr12" column="attr12"/>
+        <result property="attr13" column="attr13"/>
+        <result property="attr14" column="attr14"/>
+        <result property="attr15" column="attr15"/>
+        <result property="attr16" column="attr16"/>
+        <result property="attr17" column="attr17"/>
+        <result property="tenantId" column="tenant_id"/>
+        <result property="extgroupId" column="extsys_group_id"/>
+        <result property="shortName" column="shortname"/>
+        <result property="enabled" column="enabled"/>
+        <result property="hisId" column="his_id"/>
+        <result property="levelId" column="level_id"/>
+        <collection property="childrenList" javaType="java.util.ArrayList"
+                    column="group_id"  ofType="kf.plt.admin.sysmgnt.entity.Group" select="childrenSelect"></collection>
+    </resultMap>
+
+    <!--<resultMap type="kf.plt.admin.sysmgnt.entity.Group" id="childrenResult">-->
+        <!--<result property="id" column="group_id"/>-->
+        <!--<result property="name" column="name"/>-->
+        <!--<result property="parentId" column="parent_id"/>-->
+        <!--<result property="code" column="code"/>-->
+        <!--<result property="path" column="path"/>-->
+        <!--<result property="type" column="type"/>-->
+        <!--<result property="crtUserName" column="crt_user_name"/>-->
+        <!--<result property="crtUserId" column="crt_user_id"/>-->
+        <!--<result property="crtTime" column="crt_time"/>-->
+        <!--<result property="updUserName" column="upd_user_name"/>-->
+        <!--<result property="updUserId" column="upd_user_id"/>-->
+        <!--<result property="updTime" column="upd_time"/>-->
+        <!--<result property="attr1" column="attr1"/>-->
+        <!--<result property="attr2" column="attr2"/>-->
+        <!--<result property="attr3" column="attr3"/>-->
+        <!--<result property="attr4" column="attr4"/>-->
+        <!--<result property="tenantId" column="tenant_id"/>-->
+        <!--<result property="extgroupId" column="extsys_group_id"/>-->
+        <!--<result property="shortName" column="shortname"/>-->
+        <!--<result property="enabled" column="enabled"/>-->
+        <!--<result property="hisId" column="his_id"/>-->
+        <!--<result property="levelId" column="level_id"/>-->
+        <!--<collection property="childrenList" javaType="java.util.ArrayList"-->
+                    <!--column="group_id"  ofType="kf.plt.admin.sysmgnt.entity.Group" select="childrenSelect"></collection>-->
+    <!--</resultMap>-->
+
+    <insert id="insertGroupUser">
+      insert into kf_sec_group_user (sec_group_user_id,user_id,group_id,tenant_id) values (#{id},#{userId},#{groupId},#{tenantId})
+    </insert>
+    <delete id="deleteGroupUser">
+      delete from kf_sec_group_user where group_id = #{groupId} and user_id = #{userId}
+    </delete>
+    <select id="selectGroupUsers" resultType="kf.plt.admin.sysmgnt.entity.User">
+      select u.user_chname as name,u.user_name as username,u.user_id as id,u.sex,u.description,u.group_id as groupId from kf_sec_group d
+          inner join kf_sec_group_user bdu
+        on bdu.group_id = d.group_id
+          inner join
+          kf_sec_user u
+        on bdu.user_id = u.user_id
+      where bdu.group_id = #{groupId}
+       <if test="userName!=null">
+        and u.user_chname like #{userName}
+        and u.is_deleted = '0'
+        and u.is_disabled = '0'
+       </if>
+    </select>
+
+    <select id="queryTreeList" resultMap="groupMap">
+        select * from kf_sec_group
+        where 1 = 1
+        <if test="groupId != null and '' != groupId">
+        and parent_id = #{groupId}
+        </if>
+        <if test="name != null and '' != name">
+        and name like '%${name}%'
+        </if>
+        <if test="code != null and '' != code">
+        and code like '${code}%'
+        </if>
+        <if test="type != null and '' != type">
+        and type = #{type}
+        </if>
+        <if test="levelId != null and '' != levelId">
+        and level_id = #{levelId}
+        </if>
+        <if test="enabled != null and '' != enabled">
+        and enabled = #{enabled}
+        </if>
+    </select>
+
+    <select id="queryIsLastGroup" resultMap="groupMap">
+        select * from kf_sec_group u
+        where u.parent_id = #{groupId}
+    </select>
+    <delete id="deleGroup">
+        delete from kf_sec_group where group_id = #{groupId}
+    </delete>
+
+    <!-- 根据组织机构ID查询组织机构-->
+    <select id="queryGroupById" resultMap="groupMap">
+        select * from kf_sec_group u
+        where u.group_id = #{groupId}
+    </select>
+    <!--<select id="queryTreeList" resultMap="groupMap">-->
+        <!--SELECT *-->
+        <!--FROM kf_sec_group g-->
+        <!--where-->
+            <!--g.group_id = #{groupId}-->
+    <!--</select>-->
+    <!-- 子查询 childrenSelect 对应的结果映射 childrenResult ，又包含了 collection 标签，形成了循环递归调用 -->
+    <select id="childrenSelect" resultMap="groupMap">
+        SELECT *
+        FROM kf_sec_group
+        WHERE
+        parent_id = #{groupId}
+    </select>
+    <select id="selectByCode" resultMap="groupMap">
+        SELECT  * FROM kf_sec_group WHERE code like '${code}%'
+    </select>
+
+    <select id="selectAllGroup" resultMap="groupMap">
+        SELECT  * FROM kf_sec_group
+    </select>
+</mapper>
+
+
+<!--<if test="groupId != null and '' != groupId">-->
+<!--and g.parent_id = #{groupId}-->
+<!--</if>-->
+<!--<if test="name != null and '' != name">-->
+<!--and g.name like '%${name}%'-->
+<!--</if>-->
+<!--<if test="code != null and '' != code">-->
+<!--and g.code like '%${code}%'-->
+<!--</if>-->
+<!--<if test="type != null and '' != type">-->
+<!--and g.type = #{type}-->
+<!--</if>-->
+<!--<if test="levelId != null and '' != levelId">-->
+<!--and g.level_id = #{levelId}-->
+<!--</if>-->
+<!--<if test="enabled != null and '' != enabled">-->
+<!--and g.enabled = #{enabled}-->
+<!--</if>-->
+        <!--column="{group_id = group_id,name = name,code = code,type = type,level_id = level_id,enabled = enabled}"-->

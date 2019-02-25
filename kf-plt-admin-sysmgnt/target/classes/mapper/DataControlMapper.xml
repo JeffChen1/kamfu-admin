@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kf.plt.admin.sysmgnt.mapper.DataControlMapper" >
+  <resultMap id="BaseResultMap" type="kf.plt.admin.sysmgnt.entity.DataControl" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="menu_id" property="menuId" jdbcType="VARCHAR" />
+    <result column="row_sql" property="rowSql" jdbcType="VARCHAR" />
+    <result column="column_sql" property="columnSql" jdbcType="VARCHAR" />
+    <result column="mapper_code" property="mapperCode" jdbcType="VARCHAR" />
+    <result column="mapper_method" property="mapperMethod" jdbcType="VARCHAR" />
+    <result column="crt_time" property="crtTime" jdbcType="TIMESTAMP" />
+    <result column="crt_id" property="crtId" jdbcType="VARCHAR" />
+    <result column="crt_name" property="crtName" jdbcType="VARCHAR" />
+    <result column="upd_time" property="updTime" jdbcType="TIMESTAMP" />
+    <result column="upd_id" property="updId" jdbcType="VARCHAR" />
+    <result column="upd_name" property="updName" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <!-- 根据用户ID 查询该用户拥有的数据权限-->
+  <select id="selectAuthorityMenuDataByUserId">
+      SELECT DISTINCT
+	t.*
+FROM
+	kf_sec_resource_authority ra
+INNER JOIN kf_sec_data_control t ON ra.resource_id = t.id
+AND ra.authority_id IN(
+	SELECT
+		role_id
+	FROM
+		kf_sec_role_user
+	WHERE
+		user_id = #{userId}
+	UNION
+		SELECT
+			role_id
+		FROM
+			kf_sec_role_leader
+		WHERE
+			user_id = #{userId}
+)
+AND ra.authority_type = 'role'
+AND(
+ ra.resource_type = 'data'
+)
+AND t.menu_id = #{menuId}
+  </select>
+  <select id="selectByMenuIdAndRoleId" resultMap="BaseResultMap">
+      select * from kf_sec_data_control where menu_id = #{menuId} and id in
+ (SELECT
+	resource_id
+FROM
+	kf_sec_resource_authority
+WHERE
+	authority_id = #{roleId}
+AND(
+	resource_type = 'data'
+))
+  </select>
+</mapper>

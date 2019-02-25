@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Title: kf-plt-admin-control-monitor
+Implementation-Version: 1.0.2
+Built-By: JeffChen1
+Implementation-Vendor-Id: kf.plt.admin
+Build-Jdk: 1.8.0_181
+Implementation-URL: https://github.com/wxiaoqi/ace-security/kf-plt-adm
+ in-control/kf-plt-admin-control-monitor
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+
