@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kf.plt.admin.sysmgnt.mapper.PositionMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="kf.plt.admin.sysmgnt.entity.Position" id="positionMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="groupId" column="group_id"/>
+        <result property="code" column="code"/>
+        <result property="type" column="type"/>
+        <result property="crtUserName" column="crt_user_name"/>
+        <result property="crtUserId" column="crt_user_id"/>
+        <result property="crtTime" column="crt_time"/>
+        <result property="updUserName" column="upd_user_name"/>
+        <result property="updUserId" column="upd_user_id"/>
+        <result property="updTime" column="upd_time"/>
+        <result property="attr1" column="attr1"/>
+        <result property="attr2" column="attr2"/>
+        <result property="attr3" column="attr3"/>
+        <result property="attr4" column="attr4"/>
+        <result property="tenantId" column="tenant_id"/>
+    </resultMap>
+    <insert id="insertPositionUser">
+      insert into kf_sec_position_user (id,position_id,user_id,tenant_id) values (#{id},#{positionId},#{userId},#{tenantId})
+    </insert>
+    <insert id="insertPositionRole">
+      insert into kf_sec_position_role (id,position_id,role_id,tenant_id) values (#{id},#{positionId},#{roleId},#{tenantId})
+    </insert>
+    <insert id="insertPositionGroup">
+      insert into kf_sec_position_group (id,position_id,group_id,tenant_id) values (#{id},#{positionId},#{groupId},#{tenantId})
+    </insert>
+    <delete id="deletePositionUsers">
+      delete from kf_sec_position_user where position_id = #{positionId}
+    </delete>
+    <delete id="deletePositionRoles">
+        delete from kf_sec_position_role where position_id = #{positionId}
+    </delete>
+    <delete id="deletePositionGroups">
+        delete from kf_sec_position_group where position_id = #{positionId}
+    </delete>
+    <select id="selectPositionUsers" resultType="kf.plt.admin.sysmgnt.entity.User">
+        select u.user_name as username,u.user_chname as name,u.user_id as id from kf_sec_user u inner join kf_sec_position_user bpu
+        on bpu.user_id = u.user_id
+        where bpu.position_id = #{positionId}
+    </select>
+    <select id="selectPositionRoles" resultType="kf.plt.admin.sysmgnt.entity.Role">
+        select g.* from kf_sec_role g inner join kf_sec_position_role bpg
+        on g.role_id = bpg.role_id
+        where bpg.position_id = #{positionId}
+    </select>
+    <select id="selectPositionGroups" resultType="kf.plt.admin.sysmgnt.entity.Group">
+        select d.* from kf_sec_group d inner join kf_sec_position_group bpd
+        on d.group_id = bpd.group_id
+        where bpd.position_id = #{positionId}
+    </select>
+
+</mapper>

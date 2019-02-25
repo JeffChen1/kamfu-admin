@@ -1,0 +1,63 @@
+package kf.plt.admin.sysmgnt.entity;
+
+import kf.ats.plt.base.entity.BaseObject;
+
+import java.util.List;
+
+/**
+ *@Description:
+ *
+ *分页查询
+ *
+ *@Author: wangs
+ *
+ *@Date 2018/9/6
+ */
+public class PageBean extends BaseObject {
+
+    private Integer currentPage;//当前页
+    private int pageSize;//每页显示记录条数
+    private int totalPage;//总页数
+    private List<?> dataList;//每页显示的数据
+    private int star;//开始数据
+
+    public Integer getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(Integer currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public int getTotalPage() {
+        return totalPage;
+    }
+
+    public void setTotalPage(int totalPage) {
+        this.totalPage = totalPage;
+    }
+
+    public List<?> getDataList() {
+        return dataList;
+    }
+
+    public void setDataList(List<?> dataList) {
+        this.dataList = dataList;
+    }
+
+    public int getStar() {
+        return star;
+    }
+
+    public void setStar(int star) {
+        this.star = star;
+    }
+}

@@ -1,0 +1,55 @@
+logging:
+  config: classpath:gateLogback-spring.xml
+spring:
+    application:
+        name: kf-plt-admin-gate
+    thymeleaf:
+        mode: LEGACYHTML5
+        cache: false
+    jackson:
+        date-format: yyyy-MM-dd HH:mm:ss
+        time-zone: GMT+8
+        default-property-inclusion: non_null
+    redis:
+        database: 1
+        host: ${REDIS_HOST:localhost}
+        port: ${REDIS_PORT:6379}
+        pool:
+            max-active: 20
+    rabbitmq:
+        host: ${RABBIT_MQ_HOST:localhost}
+        port:  ${RABBIT_MQ_PORT:5672}
+        username: guest
+        password: guest
+    zipkin:
+      enabled: true
+    sleuth:
+      sampler:
+        percentage: 1
+server:
+    port: 8765 #启动端口
+
+gate:
+  # 开发不进行权限校验的路径
+  ignore:
+    startWith: /static,/auth/jwt,/admin/v2/api-docs,/dict/v2/api-docs,/auth/v2/api-docs,/dict/dictValue/type/comm_sex
+
+auth:
+  serviceId: kf-plt-admin-auth
+  user:
+    token-header: Authorization
+    limit-expire: 1440 #1天
+  client:
+    token-header: client-token
+    id: kf-plt-admin-gate  #不填则默认读取spring.application.name
+    secret: 123456
+
+# 配置swagger
+swagger:
+    enabled: true
+    base-package: kf.plt.admin.gate
+    title: kf-plt-admin-gate
+    version: 1.0.0.SNAPSHOT
+    description: 网关服务
+    contact:
+        name: gate

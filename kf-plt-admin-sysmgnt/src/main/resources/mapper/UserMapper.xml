@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kf.plt.admin.sysmgnt.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="kf.plt.admin.sysmgnt.entity.User">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="user_id" jdbcType="VARCHAR" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="username" />
+    <result column="pwd" jdbcType="VARCHAR" property="password" />
+    <result column="user_chname" jdbcType="VARCHAR" property="name" />
+    <result column="birthday" jdbcType="VARCHAR" property="birthday" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobilePhone" />
+    <result column="phone" jdbcType="VARCHAR" property="telPhone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="sex" jdbcType="CHAR" property="sex" />
+    <result column="type" jdbcType="CHAR" property="type" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result property="crtUserName" column="crt_user_name"/>
+    <result property="crtUserId" column="crt_user_id"/>
+    <result property="crtTime" column="crt_time"/>
+    <result property="updUserName" column="upd_user_name"/>
+    <result property="updUserId" column="upd_user_id"/>
+    <result property="updTime" column="upd_time"/>
+    <result column="attr1" jdbcType="VARCHAR" property="attr1" />
+    <result column="attr2" jdbcType="VARCHAR" property="attr2" />
+    <result column="attr3" jdbcType="VARCHAR" property="attr3" />
+    <result column="attr4" jdbcType="VARCHAR" property="attr4" />
+    <result column="attr5" jdbcType="VARCHAR" property="attr5" />
+    <result column="attr6" jdbcType="VARCHAR" property="attr6" />
+    <result column="attr7" jdbcType="VARCHAR" property="attr7" />
+    <result column="attr8" jdbcType="VARCHAR" property="attr8" />
+    <result column="attr9" jdbcType="VARCHAR" property="attr9" />
+    <result column="attr10" jdbcType="VARCHAR" property="attr10" />
+    <result column="attr11" jdbcType="VARCHAR" property="attr11" />
+    <result column="attr12" jdbcType="VARCHAR" property="attr12" />
+    <result column="attr13" jdbcType="VARCHAR" property="attr13" />
+    <result column="attr14" jdbcType="VARCHAR" property="attr14" />
+    <result column="attr15" jdbcType="VARCHAR" property="attr15" />
+    <result column="attr16" jdbcType="VARCHAR" property="attr16" />
+    <result column="attr17" jdbcType="VARCHAR" property="attr17" />
+    <result column="attr18" jdbcType="VARCHAR" property="attr18" />
+    <result column="attr19" jdbcType="VARCHAR" property="attr19" />
+    <result column="attr20" jdbcType="VARCHAR" property="attr20" />
+    <result column="attr21" jdbcType="VARCHAR" property="attr21" />
+    <result column="attr22" jdbcType="VARCHAR" property="attr22" />
+    <result column="attr23" jdbcType="VARCHAR" property="attr23" />
+    <result column="group_id" jdbcType="VARCHAR" property="groupId" />
+    <result column="is_deleted" jdbcType="VARCHAR" property="isDeleted"/>
+    <result column="is_disabled" jdbcType="VARCHAR" property="isDisabled"/>
+    <result column="is_super_admin" jdbcType="VARCHAR" property="isSuperAdmin"/>
+    <result column="tenant_id" jdbcType="VARCHAR" property="tenantId"/>
+    <result column="extsys_user_id" jdbcType="VARCHAR" property="extuserId"/>
+    <result column="enabled" jdbcType="VARCHAR" property="enabled"/>
+    <result column="his_id" jdbcType="VARCHAR" property="hisId"/>
+  </resultMap>
+  
+  <select id="selectMemberByRoleId" resultMap="BaseResultMap">
+    select u.user_name,u.user_chname,u.user_id from kf_sec_user u
+    left join  kf_sec_role_user gm
+    on gm.user_id = u.user_id where gm.role_id = #{roleId}
+  </select>
+  <select id="selectLeaderByRoleId" resultMap="BaseResultMap">
+    select u.user_name,u.user_chname,u.user_id from kf_sec_user u
+    left join kf_sec_role_leader gm
+    on gm.user_id = u.user_id where gm.role_id = #{roleId}
+  </select>
+  <select id="selectUserDataGroupIds" resultType="java.lang.String">
+    select bd.group_id from kf_sec_group bd
+    inner join
+    kf_sec_position_group bpd
+    on bpd.group_id = bd.group_id
+    inner join kf_sec_position_user bpu
+    on bpd.position_id = bpu.position_id
+    where bpu.user_id = #{userId}
+  </select>
+
+  <!-- 根据用账户,用户名,组织机构ID 查找用户-->
+  <select id="selective" resultMap="BaseResultMap">
+    select * from kf_sec_user
+    where 1 = 1
+    <if test="username != null and username != ''">
+      and user_name like '%${username}%'
+    </if>
+    <if test="name != null and name != ''">
+      and user_chname like '%${name}%'
+    </if>
+    <if test="groupId != null and '' != groupId">
+      and group_id in (${groupId})
+    </if>
+  </select>
+</mapper>

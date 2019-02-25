@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kf.plt.admin.sysmgnt.mapper.RoleMapper">
+  <resultMap id="BaseResultMap" type="kf.plt.admin.sysmgnt.entity.Role">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="role_id" jdbcType="VARCHAR" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="type" jdbcType="CHAR" property="type" />
+    <result column="role_type" jdbcType="INTEGER" property="roleType" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result property="crtUserName" column="crt_user_name"/>
+    <result property="crtUserId" column="crt_user_id"/>
+    <result property="crtTime" column="crt_time"/>
+    <result property="updUserName" column="upd_user_name"/>
+    <result property="updUserId" column="upd_user_id"/>
+    <result property="updTime" column="upd_time"/>
+    <result column="attr1" jdbcType="VARCHAR" property="attr1" />
+    <result column="attr2" jdbcType="VARCHAR" property="attr2" />
+    <result column="attr3" jdbcType="VARCHAR" property="attr3" />
+    <result column="attr4" jdbcType="VARCHAR" property="attr4" />
+    <result column="attr5" jdbcType="VARCHAR" property="attr5" />
+    <result column="attr6" jdbcType="VARCHAR" property="attr6" />
+    <result column="attr7" jdbcType="VARCHAR" property="attr7" />
+    <result column="attr8" jdbcType="VARCHAR" property="attr8" />
+    <result property="tenantId" column="tenant_id"/>
+    <result property="enabled" column="enabled"/>
+    <result property="hisId" column="his_id"/>
+  </resultMap>
+  <delete id="deleteRoleMembersById">
+      delete from kf_sec_role_user where sec_role_user_id = #{roleId}
+  </delete>
+  <delete id="deleteRoleLeadersById">
+    delete from kf_sec_role_leader where sec_role_leader_id = #{roleId}
+  </delete>
+  <insert id="insertRoleMembersById">
+    insert into kf_sec_role_user (
+       sec_role_user_id,role_id,user_id,tenant_id
+    )
+    values(
+       #{id},#{roleId},#{userId},#{tenantId}
+    )
+  </insert>
+  <insert id="insertRoleLeadersById">
+    insert into kf_sec_role_leader (
+       sec_role_leader_id,role_id,user_id,tenant_id
+    )
+    values(
+       #{id},#{roleId},#{userId},#{tenantId}
+    )
+  </insert>
+  <select id="selectRoleByUserId" resultMap="BaseResultMap">
+    select * from kf_sec_role n WHERE  n.role_id  in (SELECT t.role_id from kf_sec_role_user t where t.user_id = #{userId})
+  </select>
+
+  <select id="selectById" resultMap="BaseResultMap">
+  select * from kf_sec_role n WHERE  n.role_id  in (SELECT role_id from kf_sec_role_user t where t.user_id = #{userId})
+  </select>
+</mapper>

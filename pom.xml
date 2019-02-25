@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>kf.plt.admin</groupId>
+    <artifactId>kf-plt-admin</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <url>https://github.com/wxiaoqi/ace-security</url>
+
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.4.RELEASE</version>
+    </parent>
+
+    <properties>
+        <docker.image.prefix>ag</docker.image.prefix>
+        <docker.plugin.version>0.4.13</docker.plugin.version>
+        <mapper.version>3.4.0</mapper.version>
+        <maven.compile.source>1.8</maven.compile.source>
+        <maven.compile.target>1.8</maven.compile.target>
+    </properties>
+
+    <modules>
+        <module>kf-plt-admin-center</module>
+        <module>kf-plt-admin-common</module>
+        <module>kf-plt-admin-jwt-core</module>
+        <module>kf-plt-admin-merge</module>
+        <module>kf-plt-admin-generator</module>
+        <module>kf-plt-admin-auth</module>
+        <module>kf-plt-admin-control</module>
+        <module>kf-plt-admin-sysmgnt</module>
+        <module>kf-plt-admin-gate</module>
+        <module>kf-plt-admin-intf</module>
+        <module>kf-plt-admin-transaction</module>
+        <module>kf-plt-admin-dict</module>
+        <module>kf-plt-admin-base</module>
+    </modules>
+
+    <developers>
+        <developer>
+            <name>kamfu</name>
+            <email>kamfu@kamfu.com.cn</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/wxiaoqi/ace-security.git</connection>
+        <developerConnection>scm:git:https://github.com/wxiaoqi/ace-security.git</developerConnection>
+        <url>https://github.com/wxiaoqi/ace-security</url>
+        <tag>1.0-SNAPSHOT</tag>
+    </scm>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.14</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>snapshots</id>
+            <name>kamfu maven</name>
+            <url>https://devrepo-cn-south-1.devcloud.huaweicloud.com/01/nexus/content/repositories/4008af7163bb4432acc8d5d3df99b215_2_0/</url>
+        </repository>
+    </repositories>
+    <!--依赖管理，用于管理spring-cloud的依赖，其中Camden.SR3是版本号-->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Dalston.SR1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.33</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>1.0.11</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <!--<distributionManagement>-->
+        <!--<repository>&lt;!&ndash;版本库&ndash;&gt;-->
+            <!--<id>kamfu-admin</id>&lt;!&ndash;setting文件中的id&ndash;&gt;-->
+            <!--<name>NexusReleases</name>-->
+            <!--<url>http://192.168.3.208:8081/repository/kamfu-admin-release/</url>-->
+        <!--</repository>-->
+        <!--<snapshotRepository>-->
+            <!--<id>kamfu-admin</id>-->
+            <!--<name>NexusSnapshots</name>-->
+            <!--<url>http://192.168.3.208:8081/repository/kamfu-admin-snapshot/</url>-->
+        <!--</snapshotRepository>-->
+    <!--</distributionManagement>-->
+    <distributionManagement>
+        <repository><!--版本库-->
+            <id>releases</id><!--setting文件中的id-->
+            <name>NexusReleases</name>
+            <url>https://devrepo-cn-south-1.devcloud.huaweicloud.com/01/nexus/content/repositories/4008af7163bb4432acc8d5d3df99b215_1_0/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>NexusSnapshots</name>
+            <url>https://devrepo-cn-south-1.devcloud.huaweicloud.com/01/nexus/content/repositories/4008af7163bb4432acc8d5d3df99b215_2_0/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-javadoc-plugin</artifactId>-->
+                <!--<version>2.10.3</version>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>attach-javadocs</id>-->
+                        <!--<goals>-->
+                            <!--<goal>jar</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
+        </plugins>
+    </build>
+</project>
